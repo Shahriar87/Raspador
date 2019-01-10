@@ -22,16 +22,17 @@ module.exports = function (app, db, axios, cheerio) {
                     .children("a")
                     .attr("href").trim();
 
-                db.Review.create(result)
-                    .then(function (dbReview) {
-                        console.log(dbReview);
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
+                db.Review.remove({}, function () {
+                    db.Review.create(result)
+                        .then(function (dbReview) {
+                            console.log(dbReview);
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                })
             });
-
-            res.send("Scrape Complete");
+            res.redirect('/');
         });
     });
 

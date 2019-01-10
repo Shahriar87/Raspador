@@ -4,7 +4,6 @@
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
@@ -16,7 +15,7 @@
                 <a class="nav-link" href="/saved">Saved Reviews</a>
             </li>
             <li class="nav-item">
-                <a class="btn btn-danger scrape-new">SCRAPE NEW REVIEWS!</a>
+                <a href="/scrape" class="btn btn-danger scrape-new mx-5">SCRAPE NEW REVIEWS!</a>
             </li>
             <li class="nav-item">
                 <a class="btn btn-danger clear">CLEAR REVIEWS!</a>
@@ -24,36 +23,35 @@
         </ul>
     </div>
 </nav>
-
-<div class="jumbotron text-center">
-    <div class="overlay">
-    </div>
-    <div class="background-image">
-    </div>
-    <div class="caption">
-        <h1>Raspador - Scavenger of Reviews</h1>
-        <p>CNET Tech Reviews Edition</p>
-    </div>
-</div>
-<div class="container-fluid article-container">
-    <div class="alert alert-warning text-center">
-        <h4>No Review at this moment!</h4>
-    </div>
-    <div class="card">
-        <div class="card-header text-center">
-            <h3>What Would You Like To Do?</h3>
+<div class="container">
+    <div class="jumbotron text-center">
+        <div class="overlay">
         </div>
-        <div class="card-body text-center">
-            <h4><a class="scrape-new">Try Scavanging New Reviews</a></h4>
-            <h4><a href="/saved">Go to Saved Reviews</a></h4>
+        <div class="background-image">
+        </div>
+        <div class="caption">
+            <h1>Raspador - Scavenger of Reviews</h1>
+            <h3>CNET Tech Reviews Edition - HOT PRODUCTS!</h3>
         </div>
     </div>
-</div>
+    <div class="container-fluid review-container">
+        <div class="alert alert-warning text-center">
+            <h4>No Review at this moment!</h4>
+        </div>
+        <div class="card">
+            <div class="card-header text-center">
+                <h3>What Would You Like To Do?</h3>
+            </div>
+            <div class="card-body text-center">
+                <h4><a class="scrape-new">Try Scavanging New Reviews</a></h4>
+                <h4><a href="/saved">Go to Saved Reviews</a></h4>
+            </div>
+        </div>
 
+    </div>
+</div>
 <footer class="footer">
     <div class="container">
         <p>CNET Tech Reviews Mongo Scraper</p>
     </div>
 </footer>
-
-<script src="js/index.js" type="text/javascript"></script>
