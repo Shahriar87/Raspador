@@ -30,8 +30,9 @@ app.engine(
 );
 app.set("view engine", "hbs");
 
-// ----- Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/scavangerOfReviews", { useNewUrlParser: true });
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scavangerOfReviews";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // ----- Routes
 require("./routes/apiRoutes")(app, db, axios, cheerio);
