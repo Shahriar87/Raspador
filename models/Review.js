@@ -23,7 +23,11 @@ var ReviewSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Note"
         }
-    ]
+    ],
+    isSaved: {
+        type: Boolean,
+        default: false
+    }
 });
 
 var Review = mongoose.model("Review", ReviewSchema);
