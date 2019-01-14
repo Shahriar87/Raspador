@@ -9,7 +9,7 @@ module.exports = function (app, db, axios, cheerio) {
 
     // ----- Deleting Scraped content from database
     app.delete("/api/reviews", (req, res) => {
-        db.Review.remove({}).exec(function (err, doc) {
+        db.Review.deleteMany({ "isSaved": false }).exec(function (err, doc) {
             if (err) {
                 res.json("There was a problem deleting the information to the database.");
             }
@@ -36,6 +36,21 @@ module.exports = function (app, db, axios, cheerio) {
             .catch(err => { res.json(err) });
     });
 
-
+    // ----- Creating a Review
+    app.post("/api/notes/:id", (req, res) => {
+        var Note = new Note({
+            body: req.body.text,
+            article: req.params.id
+        });
+        console.log(req.body)
+        Note.save((error, note) => {
+            if (error) console.log(error)
+            else {
+                db.Review.findOneAndUpdate({ "_id": req.params.id }, { $push: { "notes": note } })
+                    .then(dbNote => { res.send(dbNote) })
+                    .catch(err => { res.send(err) });
+            }
+        });
+    });
 
 };

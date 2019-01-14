@@ -1,9 +1,9 @@
 module.exports = function (app, db, axios, cheerio) {
 
     // ----- LOAD INDEX PAGE
-
     app.get("/", (req, res) => {
-        db.Review.find({ "isSaved": false }).exec(function (error, data) {
+        db.Review.find({ "isSaved": false }).limit(12)
+        .exec(function (error, data) {
             var reviewObject = {
                 review: data
             };
@@ -15,7 +15,8 @@ module.exports = function (app, db, axios, cheerio) {
 
     // ----- LOAD SAVED PAGE
     app.get("/saved", function (req, res) {
-        db.Review.find({ "isSaved": true }).exec(function (error, data) {
+        db.Review.find({ "isSaved": true }).populate("notes")
+        .exec(function (error, data) {
             var reviewObject = {
                 review: data
             };
@@ -46,10 +47,10 @@ module.exports = function (app, db, axios, cheerio) {
                     .children("a")
                     .attr("href").trim();
 
-                db.Review.deleteMany({}, (err) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
+                // db.Review.deleteMany({}, (err) => {
+                //     if (err) {
+                //         console.log(err);
+                //     } else {
                         db.Review.create(result).then(function (err, dbReview) {
                             if (err) {
                                 console.log(err);
@@ -57,8 +58,8 @@ module.exports = function (app, db, axios, cheerio) {
                                 console.log(dbReview);
                             }
                         })
-                    }
-                })
+                //     }
+                // })
             })
             // Send a message to the client
             res.send("Scrape Complete");

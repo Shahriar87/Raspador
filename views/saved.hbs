@@ -39,9 +39,12 @@
         {{#each review}}
         <div class="card">
             <div class="card-header bg-primary">
-                <h3><a class="review-link text-white" target="_blank" rel="noopener noreferrer" href={{this.link}}>{{this.title}}</a><a
-                        class="btn btn-danger delete float-right" data-id={{this._id}}>Delete
-                        Review</a></h3>
+                <h3><a class="review-link text-white" target="_blank" rel="noopener noreferrer" href={{this.link}}>{{this.title}}</a>
+                    <a class="btn btn-danger delete float-right" data-id={{this._id}}>Delete Review</a>
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" class="btn btn-success noteadd float-right mr-5" data-toggle="modal"
+                        data-target="#noteModal{{this._id}}" data-id={{this._id}}>Note</button>
+                </h3>
             </div>
             <div class="card-body">{{this.brief}}</div>
         </div>
@@ -65,6 +68,10 @@
         </div>
     </div>
 </div>
+<!--Modal for notes-->
+{{#each review}}
+{{> notes-modal }}
+{{/each}}
 <footer class="footer">
     <div class="container">
         <p>CNET Tech Reviews Mongo Scraper</p>

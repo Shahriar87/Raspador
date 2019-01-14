@@ -1,6 +1,39 @@
 // ----- Grab Reviews
 
-$(document).ready(function () {
+$(document).ready(() => {
+
+    // ----- Event handlers
+    $(document).on("click", "#clear", deleteReview);
+    $(document).on("click", ".scrape-new", scrapeReview);
+
+    $(".save").on("click", function () {
+        var thisId = $(this).attr("data-id");
+        // console.log(thisId);
+        saveReview(thisId);
+    });
+
+    $(".delete").on("click", function () {
+        var thisId = $(this).attr("data-id");
+        // console.log(thisId);
+        delSelectedReview(thisId);
+    });
+
+    $(".notesave").on("click", function () {
+        var thisId = $(this).attr("data-id");
+        if (!$("#noteText" + thisId).val()) {
+            alert("please write something")
+        } else {
+            noteAdd(thisId);
+        }
+    });
+
+    // ----- Modal Display
+    $(".noteadd").on("click", function () {
+        var thisId = $(this).attr("data-id");
+        console.log(thisId);
+        $("#noteModal" + thisId).modal("show");
+    });
+
 
     // ----- Delete Review
     function deleteReview(event) {
@@ -14,8 +47,6 @@ $(document).ready(function () {
         })
     };
 
-    $(document).on("click", "#clear", deleteReview);
-
     // ----- Scrape Review
     function scrapeReview(event) {
         event.stopPropagation();
@@ -26,10 +57,7 @@ $(document).ready(function () {
         }).done(function () {
             window.location = "/";
         })
-    }
-
-    $(document).on("click", ".scrape-new", scrapeReview);
-
+    };
 
     // ----- Save Review
     function saveReview(data) {
@@ -41,15 +69,7 @@ $(document).ready(function () {
         }).done(function () {
             window.location = "/";
         })
-    }
-
-    $(".save").on("click", function () {
-        var thisId = $(this).attr("data-id");
-        var reviewId = { id: thisId };
-        // console.log(thisId);
-        saveReview(thisId);
-    });
-
+    };
 
     // ----- Delete Selected Saved Review
     function delSelectedReview(data) {
@@ -61,13 +81,21 @@ $(document).ready(function () {
         }).done(function () {
             window.location = "/saved";
         })
-    }
+    };
 
-    $(".delete").on("click", function () {
-        var thisId = $(this).attr("data-id");
-        var reviewId = { id: thisId };
-        // console.log(thisId);
-        delSelectedReview(thisId);
-    });
-
+    // ----- Adding Notes
+    function noteAdd(data) {
+        $.ajax({
+            method: "POST",
+            url: "/api/notes/" + data,
+            data: {
+                text: $("#noteText" + data).val()
+            }
+        }).done(function (data) {
+            console.log(data)
+            $("#noteText" + thisId).val("");
+            $(".modalNote").modal("hide");
+            window.location = "/saved"
+        });
+    };
 });
