@@ -1,5 +1,28 @@
 module.exports = function (app, db, axios, cheerio) {
 
+    // ----- LOAD INDEX PAGE
+
+    app.get("/", (req, res) => {
+        db.Review.find({ "isSaved": false }).exec(function (error, data) {
+            var reviewObject = {
+                review: data
+            };
+            console.log(reviewObject);
+            res.render("index", reviewObject);
+        });
+    });
+
+
+    // ----- LOAD SAVED PAGE
+    app.get("/saved", function (req, res) {
+        db.Review.find({ "isSaved": true }).exec(function (error, data) {
+            var reviewObject = {
+                review: data
+            };
+            res.render("saved", reviewObject);
+        });
+    });
+
     // ----- Scraping contents
     app.get("/scrape", (req, res) => {
         axios.get("https://www.cnet.com/reviews/").then(function (response) {
@@ -27,7 +50,7 @@ module.exports = function (app, db, axios, cheerio) {
                     if (err) {
                         console.log(err);
                     } else {
-                        db.Review.create(result, function (err, dbReview) {
+                        db.Review.create(result).then(function (err, dbReview) {
                             if (err) {
                                 console.log(err);
                             } else {
@@ -37,14 +60,10 @@ module.exports = function (app, db, axios, cheerio) {
                     }
                 })
             })
-
             // Send a message to the client
             res.send("Scrape Complete");
         }).catch(err => { console.log(err) });
-    })
-
-    // ----- LOAD INDEX PAGE
-    app.get("/", (req, res) => { res.render("index") });
+    });
 
     // ----- LOAD SAVED PAGE
     app.get("/saved", (req, res) => { res.render("saved") });

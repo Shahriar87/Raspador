@@ -15,10 +15,10 @@
                 <a class="nav-link" href="/saved">Saved Reviews</a>
             </li>
             <li class="nav-item">
-                <a class="btn btn-danger scrape-new mx-5">SCRAPE NEW REVIEWS!</a>
+                <a href="/" class="btn btn-danger scrape-new mx-5">SCRAPE NEW REVIEWS!</a>
             </li>
             <li class="nav-item">
-                <a id="clear" class="btn btn-danger clear">CLEAR REVIEWS!</a>
+                <a href="/" id="clear" class="btn btn-danger clear">CLEAR REVIEWS!</a>
             </li>
         </ul>
     </div>
@@ -35,11 +35,26 @@
         </div>
     </div>
     <div class="container-fluid review-container">
+        {{#if review}}
+        {{#each review}}
+        <div class="card">
+            <div class="card-header bg-primary">
+                <h3><a class="review-link text-white" target="_blank" rel="noopener noreferrer" href={{this.link}}>{{this.title}}</a><a
+                        class="btn btn-success save float-right" data-id={{this._id}}>Save
+                        Review</a></h3>
+            </div>
+            <div class="card-body">{{this.brief}}</div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="panel panel-default">
+            <div id="noreview" class="alert alert-warning text-center">
+                <h4>No Review at this moment!</h4>
+            </div>
+        </div>
+        {{/if}}
     </div>
     <div class="container-fluid">
-        {{!-- <div id="noreview" class="alert alert-warning text-center">
-            <h4>No Review at this moment!</h4>
-        </div> --}}
         <div class="card">
             <div class="card-header text-center">
                 <h3>What Would You Like To Do?</h3>

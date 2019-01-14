@@ -9,7 +9,7 @@ module.exports = function (app, db, axios, cheerio) {
 
     // ----- Deleting Scraped content from database
     app.delete("/api/reviews", (req, res) => {
-        db.Review.remove({}, function (err, doc) {
+        db.Review.remove({}).exec(function (err, doc) {
             if (err) {
                 res.json("There was a problem deleting the information to the database.");
             }
@@ -24,14 +24,15 @@ module.exports = function (app, db, axios, cheerio) {
         db.Review.update({
             id: req.params.id
         }, {
-            $set: {
-                isSaved: true
-            }
-        }, (err, edited) => {
-            if (err) {res.send(err)}
-            else{res.send(edited)}
-        })
+                $set: {
+                    isSaved: true
+                }
+            }, (err, edited) => {
+                if (err) { res.send(err) }
+                else { res.redirect("/") }
+            })
     })
+
 
 
 
