@@ -20,20 +20,21 @@ module.exports = function (app, db, axios, cheerio) {
     })
 
     // ----- Saving a Review
-    app.put("/api/reviews/:id", (req, res) => {
-        db.Review.update({
-            id: req.params.id
+    app.post("/api/reviews/:id", (req, res) => {
+        db.Review.updateOne({
+            "_id": req.params.id
         }, {
-                $set: {
-                    isSaved: true
-                }
-            }, (err, edited) => {
-                if (err) { res.send(err) }
-                else { res.redirect("/") }
-            })
+                $set:
+                    { "isSaved": true }
+            }).then(dbReview => { res.json(dbReview) })
     })
 
-
+    // ----- Delete Reviews
+    app.delete("/api/reviews/:id", (req, res) => {
+        db.Review.deleteOne({ "_id": req.params.id })
+            .then(dbReview => { res.json(dbReview) })
+            .catch(err => { res.json(err) });
+    });
 
 
 

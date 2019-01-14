@@ -9,7 +9,9 @@ $(document).ready(function () {
         $.ajax({
             method: "DELETE",
             url: "/api/reviews"
-        }).then(getReview);
+        }).done(function (data) {
+            window.location = "/"
+        })
     };
 
     $(document).on("click", "#clear", deleteReview);
@@ -21,6 +23,8 @@ $(document).ready(function () {
         $.ajax({
             method: "GET",
             url: "/scrape"
+        }).done(function () {
+            window.location = "/";
         })
     }
 
@@ -29,21 +33,41 @@ $(document).ready(function () {
 
     // ----- Save Review
     function saveReview(data) {
+        // console.log(data);
         $.ajax({
-            method: "PUT",
-            url: "/api/reviews/" + data.id,
+            method: "POST",
+            url: "/api/reviews/" + data,
             data: data
+        }).done(function () {
+            window.location = "/";
         })
     }
 
-    $(".save").on("click", function() {
-        var thisId = $(this).attr("data");
-        var reviewId = {id: thisId};
-        console.log(this);
-        saveReview(reviewId);
+    $(".save").on("click", function () {
+        var thisId = $(this).attr("data-id");
+        var reviewId = { id: thisId };
+        // console.log(thisId);
+        saveReview(thisId);
     });
 
-    // ----- Initial Page Reload and Dom Building
-    // getReview();
+
+    // ----- Delete Selected Saved Review
+    function delSelectedReview(data) {
+        // console.log(data);
+        $.ajax({
+            method: "DELETE",
+            url: "/api/reviews/" + data,
+            data: data
+        }).done(function () {
+            window.location = "/saved";
+        })
+    }
+
+    $(".delete").on("click", function () {
+        var thisId = $(this).attr("data-id");
+        var reviewId = { id: thisId };
+        // console.log(thisId);
+        delSelectedReview(thisId);
+    });
 
 });
