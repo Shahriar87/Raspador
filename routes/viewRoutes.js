@@ -65,8 +65,4 @@ module.exports = function (app, db, axios, cheerio) {
             res.send("Scrape Complete");
         }).catch(err => { console.log(err) });
     });
-
-    // ----- LOAD SAVED PAGE
-    app.get("/saved", (req, res) => { res.render("saved") });
-
 };

@@ -4,15 +4,15 @@ var Schema = mongoose.Schema;
 var ReviewSchema = new Schema({
     title: {
         type: String,
-        require: true
+        required: true
     },
     brief: {
         type: String,
-        require: true
+        required: true
     },
     price: {
         type: String,
-        require: true
+        required: true
     },
     link: {
         type: String,
@@ -26,7 +26,8 @@ var ReviewSchema = new Schema({
     ],
     isSaved: {
         type: Boolean,
-        default: false
+        default: false,
+        required: true
     }
 });
 

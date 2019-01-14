@@ -20,6 +20,7 @@ $(document).ready(() => {
 
     $(".notesave").on("click", function () {
         var thisId = $(this).attr("data-id");
+        console.log(thisId);
         if (!$("#noteText" + thisId).val()) {
             alert("please write something")
         } else {
@@ -27,13 +28,13 @@ $(document).ready(() => {
         }
     });
 
-    // ----- Modal Display
-    $(".noteadd").on("click", function () {
-        var thisId = $(this).attr("data-id");
-        console.log(thisId);
-        $("#noteModal" + thisId).modal("show");
+    $(document).on('click', '.deleteNote', function () {
+        var noteId = $(this).attr("data-note-id");
+        var reviewId = $(this).attr("data-review-id");
+        console.log(noteId);
+        console.log(reviewId);
+        noteDelete(noteId, reviewId)
     });
-
 
     // ----- Delete Review
     function deleteReview(event) {
@@ -89,13 +90,25 @@ $(document).ready(() => {
             method: "POST",
             url: "/api/notes/" + data,
             data: {
-                text: $("#noteText" + data).val()
+                text: $("#noteText" + data).val(),
+                article: data
             }
         }).done(function (data) {
-            console.log(data)
-            $("#noteText" + thisId).val("");
-            $(".modalNote").modal("hide");
+            // console.log(data)
+            $("#noteText" + data).val("");
             window.location = "/saved"
         });
     };
+
+    // ----- Delete a note
+    function noteDelete(noteId, reviewId) {
+        $.ajax({
+            method: "DELETE",
+            url: "/api/notes/" + noteId + "/" + reviewId
+        }).done(function (data) {
+            console.log(data)
+            $(".modalNote").modal("hide");
+            window.location = "/saved"
+        })
+    }
 });

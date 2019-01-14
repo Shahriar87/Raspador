@@ -7,6 +7,13 @@ module.exports = function (app, db, axios, cheerio) {
             .catch(err => { res.json(err) });
     });
 
+    // ----- Creating Note JSON API
+    app.get("/api/notes", (req, res) => {
+        db.Review.find({})
+            .then(dbReview => { res.json(dbReview) })
+            .catch(err => { res.json(err) });
+    });
+
     // ----- Deleting Scraped content from database
     app.delete("/api/reviews", (req, res) => {
         db.Review.deleteMany({ "isSaved": false }).exec(function (err, doc) {
@@ -36,15 +43,15 @@ module.exports = function (app, db, axios, cheerio) {
             .catch(err => { res.json(err) });
     });
 
-    // ----- Creating a Review
+    // ----- Creating a Note
     app.post("/api/notes/:id", (req, res) => {
-        var Note = new Note({
+        var Note = new db.Note({
             body: req.body.text,
-            article: req.params.id
+            review: req.body.article
         });
-        console.log(req.body)
-        Note.save((error, note) => {
-            if (error) console.log(error)
+        // console.log(req.body)
+        Note.save((err, note) => {
+            if (err) console.log(err)
             else {
                 db.Review.findOneAndUpdate({ "_id": req.params.id }, { $push: { "notes": note } })
                     .then(dbNote => { res.send(dbNote) })
@@ -53,4 +60,23 @@ module.exports = function (app, db, axios, cheerio) {
         });
     });
 
+    // ----- Delete a note
+    app.delete("/api/notes/:noteid/:reviewid", (req, res) => {
+        db.Note.deleteOne({ "_id": req.params.noteid }, err => {
+            console.log(req.params.noteid);
+            console.log(req.params.reviewid);
+            if (err) console.log(err)
+            else {
+                db.Review.findOneAndUpdate({
+                    "_id": req.params.reviewid
+                }, {
+                        $pull: {
+                            "notes": req.params.noteid
+                        }
+                    })
+                    .then(dbNote => { res.send(dbNote) })
+                    .catch(err => { res.send(err) });
+            }
+        });
+    });
 };
