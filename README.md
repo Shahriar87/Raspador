@@ -8,8 +8,6 @@ A Tech Review site which scrapes review from CNET.com.
 
 ### MVP:
 
-#### Company Page:
-
 1. User can scrape new Hot Products from CNET with a click of a button.
 
 2. User can save a product from that was just scraped and it will be stored for later visit.
