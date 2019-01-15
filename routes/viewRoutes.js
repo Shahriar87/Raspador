@@ -1,27 +1,27 @@
 module.exports = function (app, db, axios, cheerio) {
 
-    // ----- LOAD INDEX PAGE
+    // ----- Load Index Page
     app.get("/", (req, res) => {
         db.Review.find({ "isSaved": false }).limit(12)
-        .exec(function (error, data) {
-            var reviewObject = {
-                review: data
-            };
-            console.log(reviewObject);
-            res.render("index", reviewObject);
-        });
+            .exec(function (error, data) {
+                var reviewObject = {
+                    review: data
+                };
+                console.log(reviewObject);
+                res.render("index", reviewObject);
+            });
     });
 
 
-    // ----- LOAD SAVED PAGE
+    // ----- Load Saved Page
     app.get("/saved", function (req, res) {
         db.Review.find({ "isSaved": true }).populate("notes")
-        .exec(function (error, data) {
-            var reviewObject = {
-                review: data
-            };
-            res.render("saved", reviewObject);
-        });
+            .exec(function (error, data) {
+                var reviewObject = {
+                    review: data
+                };
+                res.render("saved", reviewObject);
+            });
     });
 
     // ----- Scraping contents
@@ -47,21 +47,16 @@ module.exports = function (app, db, axios, cheerio) {
                     .children("a")
                     .attr("href").trim();
 
-                // db.Review.deleteMany({}, (err) => {
-                //     if (err) {
-                //         console.log(err);
-                //     } else {
-                        db.Review.create(result).then(function (err, dbReview) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                console.log(dbReview);
-                            }
-                        })
-                //     }
-                // })
+                db.Review.create(result).then(function (err, dbReview) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(dbReview);
+                    }
+                })
             })
-            // Send a message to the client
+
+            // ----- Send a message to the client
             res.send("Scrape Complete");
         }).catch(err => { console.log(err) });
     });
